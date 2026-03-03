@@ -401,6 +401,255 @@ python3 ~/radio-buttons.py
 
 ---
 
+## Display/Touchscreen fuer Senderwahl
+
+### Empfehlenswerte Displays
+
+| Display | Groesse | Anschluss | Preis ca. |
+|---------|---------|-----------|-----------|
+| Raspberry Pi Official Touchscreen | 7 Zoll | DSI-Kabel | 70 EUR |
+| Waveshare 3.5" LCD | 3,5 Zoll | GPIO (SPI) | 20 EUR |
+| Waveshare 5" HDMI LCD | 5 Zoll | HDMI + USB | 35 EUR |
+| Waveshare 7" HDMI LCD | 7 Zoll | HDMI + USB | 50 EUR |
+| HDMI-Monitor (beliebig) | variabel | HDMI | variabel |
+
+### Offizielles 7-Zoll-Touchscreen-Display (DSI)
+
+**Hardware anschliessen:**
+
+1. Flachbandkabel in den **DSI-Port** des Pi stecken
+2. Stromversorgung des Displays ueber die GPIO-Pins oder separates Kabel
+3. Pi starten — Display wird automatisch erkannt
+
+Touch kalibrieren (falls noetig):
+
+```bash
+sudo apt install xinput-calibrator
+DISPLAY=:0 xinput_calibrator
+```
+
+### HDMI-Touchscreen
+
+1. HDMI-Kabel verbinden
+2. USB-Kabel fuer Touch-Funktion anschliessen
+3. Falls das Bild nicht passt, in `/boot/config.txt`:
+
+```bash
+sudo nano /boot/config.txt
+```
+
+```
+# Display-Aufloesung anpassen
+hdmi_group=2
+hdmi_mode=87
+hdmi_cvt=800 480 60 6 0 0 0
+hdmi_drive=1
+```
+
+```bash
+sudo reboot
+```
+
+### Radio-Oberflaeche: Mopidy + Iris im Kiosk-Modus
+
+Mopidy wie in Variante 3 installieren, dann im Fullscreen-Browser anzeigen:
+
+```bash
+sudo apt install chromium-browser unclutter
+```
+
+Autostart einrichten:
+
+```bash
+mkdir -p ~/.config/autostart
+nano ~/.config/autostart/radio-kiosk.desktop
+```
+
+```ini
+[Desktop Entry]
+Type=Application
+Name=Radio Kiosk
+Exec=bash -c "sleep 10 && unclutter -idle 0.5 & chromium-browser --kiosk --noerrdialogs --disable-infobars --incognito http://localhost:6680/iris/"
+```
+
+Das oeffnet beim Start automatisch die Mopidy-Weboberflaeche im Vollbild.
+
+### Radio-Oberflaeche: Python-Touchscreen-Interface mit Pygame
+
+```bash
+sudo apt install python3-pygame python3-sdl2
+```
+
+```bash
+nano ~/radio-touch.py
+```
+
+```python
+#!/usr/bin/env python3
+import pygame
+import subprocess
+import sys
+
+# Initialisierung
+pygame.init()
+screen = pygame.display.set_mode((800, 480), pygame.FULLSCREEN)
+pygame.mouse.set_visible(True)
+
+# Farben
+SCHWARZ = (0, 0, 0)
+WEISS = (255, 255, 255)
+GRAU = (60, 60, 60)
+GRUEN = (0, 180, 0)
+ROT = (180, 0, 0)
+BLAU = (0, 100, 200)
+
+font_gross = pygame.font.Font(None, 48)
+font_klein = pygame.font.Font(None, 32)
+
+# Senderliste
+sender = [
+    ("SWR3", "https://liveradio.swr.de/sw282p3/swr3/play.mp3"),
+    ("WDR 2", "https://wdr-wdr2-rheinland.icecastssl.wdr.de/wdr/wdr2/rheinland/mp3/128/stream.mp3"),
+    ("Bayern 3", "https://streams.br.de/bayern3_2.m3u"),
+    ("Radio Bob", "https://streams.radiobob.de/bob-live/mp3-192/mediaplayer"),
+]
+
+aktueller_sender = 0
+laeuft = False
+
+def mpc(cmd):
+    subprocess.run(["mpc"] + cmd.split(), capture_output=True)
+
+def sender_wechseln(index):
+    global aktueller_sender, laeuft
+    aktueller_sender = index
+    mpc("clear")
+    subprocess.run(["mpc", "add", sender[index][1]], capture_output=True)
+    mpc("play")
+    laeuft = True
+
+def zeichne_button(x, y, breite, hoehe, farbe, text):
+    rect = pygame.Rect(x, y, breite, hoehe)
+    pygame.draw.rect(screen, farbe, rect, border_radius=10)
+    label = font_klein.render(text, True, WEISS)
+    screen.blit(label, (x + (breite - label.get_width()) // 2,
+                        y + (hoehe - label.get_height()) // 2))
+    return rect
+
+def hauptschleife():
+    global laeuft
+    clock = pygame.time.Clock()
+
+    while True:
+        screen.fill(SCHWARZ)
+
+        # Titel
+        titel = font_gross.render("Internetradio", True, WEISS)
+        screen.blit(titel, (800 // 2 - titel.get_width() // 2, 15))
+
+        # Aktueller Sender
+        info = font_klein.render(
+            f"Aktuell: {sender[aktueller_sender][0]}" if laeuft else "Gestoppt",
+            True, GRUEN if laeuft else ROT
+        )
+        screen.blit(info, (800 // 2 - info.get_width() // 2, 65))
+
+        # Sender-Buttons
+        sender_buttons = []
+        for i, (name, _) in enumerate(sender):
+            farbe = BLAU if i == aktueller_sender and laeuft else GRAU
+            btn = zeichne_button(50, 110 + i * 70, 700, 55, farbe, name)
+            sender_buttons.append(btn)
+
+        # Steuerung
+        btn_play = zeichne_button(50, 410, 220, 55, GRUEN, "Play")
+        btn_stop = zeichne_button(290, 410, 220, 55, ROT, "Stop")
+        btn_exit = zeichne_button(530, 410, 220, 55, GRAU, "Beenden")
+
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                mpc("stop")
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = event.pos
+
+                for i, btn in enumerate(sender_buttons):
+                    if btn.collidepoint(pos):
+                        sender_wechseln(i)
+
+                if btn_play.collidepoint(pos):
+                    if not laeuft:
+                        sender_wechseln(aktueller_sender)
+
+                if btn_stop.collidepoint(pos):
+                    mpc("stop")
+                    laeuft = False
+
+                if btn_exit.collidepoint(pos):
+                    mpc("stop")
+                    pygame.quit()
+                    sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    mpc("stop")
+                    pygame.quit()
+                    sys.exit()
+
+        clock.tick(30)
+
+if __name__ == "__main__":
+    hauptschleife()
+```
+
+Starten mit:
+
+```bash
+python3 ~/radio-touch.py
+```
+
+Autostart fuer das Python-Interface:
+
+```bash
+nano ~/.config/autostart/radio-touch.desktop
+```
+
+```ini
+[Desktop Entry]
+Type=Application
+Name=Radio Touchscreen
+Exec=python3 /home/pi/radio-touch.py
+```
+
+### Display im Standby ausschalten (Energiesparen)
+
+```bash
+# Display nach 5 Minuten ausschalten
+sudo nano /etc/lightdm/lightdm.conf
+```
+
+Unter `[Seat:*]` hinzufuegen:
+
+```
+xserver-command=X -s 300 -dpms
+```
+
+Oder manuell:
+
+```bash
+# Display aus
+vcgencmd display_power 0
+
+# Display an
+vcgencmd display_power 1
+```
+
+---
+
 ## Nuetzliche Radio-Stream-Verzeichnisse
 
 | Quelle | URL |

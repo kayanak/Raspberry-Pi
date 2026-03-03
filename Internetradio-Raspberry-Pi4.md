@@ -228,6 +228,98 @@ amixer set Master 80%
 
 ---
 
+## USB-Audio-Ausgabe (USB-DAC / USB-Soundkarte)
+
+Die meisten USB-Audiogeraete werden vom Pi ohne zusaetzliche Treiber erkannt (Plug & Play).
+
+### 1. USB-Soundkarte anschliessen und erkennen
+
+```bash
+# Angeschlossene Audiogeraete anzeigen
+aplay -l
+```
+
+Ausgabe z.B.:
+
+```
+**** List of PLAYBACK Hardware Devices ****
+card 0: Headphones [bcm2835 Headphones], device 0: ...
+card 1: Device [USB Audio Device], device 0: ...
+```
+
+Hier ist `card 1` die USB-Soundkarte.
+
+### 2. USB-Audio als Standard setzen
+
+```bash
+sudo nano /usr/share/alsa/alsa.conf
+```
+
+Zeilen aendern:
+
+```
+defaults.ctl.card 1
+defaults.pcm.card 1
+```
+
+Oder alternativ per Benutzerkonfiguration:
+
+```bash
+nano ~/.asoundrc
+```
+
+```
+pcm.!default {
+    type hw
+    card 1
+}
+
+ctl.!default {
+    type hw
+    card 1
+}
+```
+
+### 3. MPD fuer USB-Audio konfigurieren
+
+In `/etc/mpd.conf`:
+
+```
+audio_output {
+    type    "alsa"
+    name    "USB DAC"
+    device  "hw:1,0"
+    mixer_type "software"
+}
+```
+
+Danach:
+
+```bash
+sudo systemctl restart mpd
+```
+
+### 4. Testen
+
+```bash
+# Testton ueber USB abspielen
+speaker-test -D hw:1,0 -c 2 -t wav
+
+# Lautstaerke regeln
+amixer -c 1 set Speaker 80%
+```
+
+### Empfehlenswerte USB-DACs
+
+| Geraet | Preis ca. | Bemerkung |
+|--------|-----------|-----------|
+| USB-Soundkarte (generisch) | 5-10 EUR | Einfach, funktioniert sofort |
+| Sabrent USB Audio Adapter | 8 EUR | Klinke + Mikrofon |
+| FiiO E10K | 80 EUR | HiFi-Qualitaet |
+| HifiBerry DAC+ (HAT) | 35 EUR | Kein USB, direkt auf GPIO |
+
+---
+
 ## Autostart: Radio beim Booten abspielen
 
 ### Systemd-Service erstellen

@@ -2,6 +2,8 @@
 
 Beim Pico W wird die statische IP direkt in MicroPython konfiguriert (es gibt kein Linux/raspi-config).
 
+---
+
 ## MicroPython auf den Pico W flashen:
 
   Schritt 1: Pico W im Bootloader-Modus starten
@@ -88,34 +90,4 @@ else:
 - Kopiere die Datei auf den Pico W (z.B. mit Thonny)
 - Der Pico W startet automatisch mit main.py
   
----
-
-## MicroPython auf den Pico W flashen:
-
-  Schritt 1: Pico W im Bootloader-Modus starten
-
-  - Halte die BOOTSEL-Taste auf dem Pico W gedrückt
-  - Schließe ihn gleichzeitig per USB an den PC an
-  - Loslassen – er erscheint als USB-Laufwerk namens RPI-RP2
-
-  Schritt 2: Firmware herunterladen
-
-  - Gehe zu: https://micropython.org/download/RPI_PICO_W/
-  - Lade die neueste .uf2-Datei herunter (unter "Releases")
-
-  Schritt 3: Firmware aufspielen
-
-  - Ziehe die .uf2-Datei auf das RPI-RP2 Laufwerk
-  - Der Pico startet automatisch neu und verschwindet als Laufwerk
-  - Das ist normal – MicroPython läuft jetzt
-
-  Schritt 4: In Thonny verbinden
-
-  - Öffne Thonny
-  - Unten rechts auf den Interpreter klicken
-  - MicroPython (Raspberry Pi Pico) wählen
-  - Unten in der Shell sollte erscheinen: MicroPython v1.xx.x on Raspberry Pi Pico W >>>
-
-  Wenn du das >>> siehst, ist alles bereit und du kannst deine main.py hochladen.
-
 ---

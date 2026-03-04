@@ -60,7 +60,7 @@ else:
 |-----------|----------|--------------|
 | IP | `192.168.1.100` | Gewuenschte feste IP (frei im Netzwerk) |
 | Subnetzmaske | `255.255.255.0` | Meistens so belassen |
-| Gateway | `192.168.1.1` | IP deines Routers |
+| GATEWAY | `192.168.1.1` | IP deines Routers |
 | DNS | `8.8.8.8` | Google DNS oder Router-IP |
 
 ---

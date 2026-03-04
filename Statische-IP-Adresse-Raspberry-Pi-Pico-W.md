@@ -67,9 +67,9 @@ else:
 
 ## So verwendest du es:
 
-  1. Öffne die Datei und passe diese Werte an: WLAN_SSID, WLAN_PASSWORT, STATISCHE_IP, GATEWAY - IP
-  2. Kopiere die Datei auf den Pico W (z.B. mit Thonny)
-  3. Der Pico W startet automatisch mit main.py
+- Öffne die Datei und passe diese Werte an: WLAN_SSID, WLAN_PASSWORT, STATISCHE-IP, GATEWAY-IP
+- Kopiere die Datei auf den Pico W (z.B. mit Thonny)
+-  Der Pico W startet automatisch mit main.py
 
 ## Tipps
 

@@ -25,16 +25,30 @@ STATISCHE_IP_VERWENDEN = True
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 
-# Statische IP konfigurieren BEVOR die Verbindung hergestellt wird
 # Parameter: (IP, Subnetzmaske, Gateway, DNS)
-wlan.ifconfig(('192.168.1.100', '255.255.255.0', '192.168.1.1', '8.8.8.8'))
+wlan.ifconfig((STATISCHE_IP, SUBNETZMASKE, GATEWAY, DNS_SERVER))
 
 # WLAN verbinden
-wlan.connect('DEIN_WLAN_NAME', 'DEIN_WLAN_PASSWORT')
+print("Verbinde mit WLAN:", WLAN_SSID)
+wlan.connect(WLAN_SSID, WLAN_PASSWORT)
 
 # Auf Verbindung warten
 while not wlan.isconnected():
-    time.sleep(1)
+    print("Warte auf Verbindung...")
+    time.sleep(10)
+
+ # Ergebnis pruefen
+ if wlan.isconnected():
+     ip, subnet, gw, dns = wlan.ifconfig()
+     print("\n=== Verbindung erfolgreich ===")
+     print("IP-Adresse:  ", ip)
+     print("Subnetzmaske:", subnet)
+     print("Gateway:     ", gw)
+     print("DNS:         ", dns)
+     return wlan
+ else:
+     print("Verbindung fehlgeschlagen!")
+     return None
 
 print('Verbunden mit IP:', wlan.ifconfig()[0])
 ```

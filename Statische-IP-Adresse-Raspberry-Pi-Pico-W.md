@@ -62,7 +62,7 @@ else:
   
 ---
 
-## So verwendest du es:
+## MicroPython auf den Pico W flashen:
 
   Schritt 1: Pico W im Bootloader-Modus starten
 
@@ -87,8 +87,9 @@ else:
   - Unten rechts auf den Interpreter klicken
   - MicroPython (Raspberry Pi Pico) wählen
   - Unten in der Shell sollte erscheinen:
-  MicroPython v1.xx.x on Raspberry Pi Pico W
-  >>>
+    MicroPython v1.xx.x on Raspberry Pi Pico W
+    >>>
 
   Wenn du das >>> siehst, ist alles bereit und du kannst deine main.py hochladen.
 
+---

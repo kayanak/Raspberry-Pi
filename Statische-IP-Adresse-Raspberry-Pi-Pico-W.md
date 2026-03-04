@@ -12,6 +12,9 @@ Datei `main.py` auf dem Pico W erstellen:
 import network
 import time
 
+ WLAN_SSID = "DEIN_WLAN_NAME"
+ WLAN_PASSWORT = "DEIN_PASSWORT"
+
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 

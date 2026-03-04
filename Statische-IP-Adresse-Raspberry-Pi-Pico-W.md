@@ -67,11 +67,7 @@ else:
 
 ## So verwendest du es:
 
-  1. Öffne die Datei und passe diese Werte an:
-    - WLAN_SSID - dein WLAN-Name
-    - WLAN_PASSWORT - dein WLAN-Passwort
-    - STATISCHE_IP - gewünschte IP (muss frei sein im Netzwerk)
-    - GATEWAY - IP deines Routers (meist 192.168.1.1 oder 192.168.178.1 bei Fritzbox)
+  1. Öffne die Datei und passe diese Werte an: WLAN_SSID, WLAN_PASSWORT, STATISCHE_IP, GATEWAY - IP
   2. Kopiere die Datei auf den Pico W (z.B. mit Thonny)
   3. Der Pico W startet automatisch mit main.py
 

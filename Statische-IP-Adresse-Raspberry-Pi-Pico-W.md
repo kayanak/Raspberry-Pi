@@ -64,11 +64,10 @@ else:
 
 ## MicroPython auf den Pico W flashen:
 
-  Schritt 1: Pico W im Bootloader-Modus starten
-
-  - Halte die BOOTSEL-Taste auf dem Pico W gedrückt
-  - Schließe ihn gleichzeitig per USB an den PC an
-  - Loslassen – er erscheint als USB-Laufwerk namens RPI-RP2
+Schritt 1: Pico W im Bootloader-Modus starten
+- Halte die BOOTSEL-Taste auf dem Pico W gedrückt
+- Schließe ihn gleichzeitig per USB an den PC an
+- Loslassen – er erscheint als USB-Laufwerk namens RPI-RP2
 
   Schritt 2: Firmware herunterladen
 
@@ -86,9 +85,7 @@ else:
   - Öffne Thonny
   - Unten rechts auf den Interpreter klicken
   - MicroPython (Raspberry Pi Pico) wählen
-  - Unten in der Shell sollte erscheinen:
-    MicroPython v1.xx.x on Raspberry Pi Pico W
-    >>>
+  - Unten in der Shell sollte erscheinen: MicroPython v1.xx.x on Raspberry Pi Pico W >>>
 
   Wenn du das >>> siehst, ist alles bereit und du kannst deine main.py hochladen.
 

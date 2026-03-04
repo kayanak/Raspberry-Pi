@@ -52,29 +52,9 @@ else:
 
 ```
 
----
-
-## Werte anpassen
-
-| Parameter | Beispiel | Beschreibung |
-|-----------|----------|--------------|
-| IP | `192.168.1.100` | Gewuenschte feste IP (frei im Netzwerk) |
-| Subnetzmaske | `255.255.255.0` | Meistens so belassen |
-| GATEWAY | `192.168.1.1` | IP deines Routers |
-| DNS | `8.8.8.8` | Google DNS oder Router-IP |
-
----
-
 ## So verwendest du es:
 
 - Öffne die Datei und passe diese Werte an: WLAN_SSID, WLAN_PASSWORT, STATISCHE-IP, GATEWAY-IP
 - Kopiere die Datei auf den Pico W (z.B. mit Thonny)
--  Der Pico W startet automatisch mit main.py
+- Der Pico W startet automatisch mit main.py
 
-## Tipps
-
----
-
-- Die IP-Adresse im DHCP-Bereich des Routers **ausschliessen** oder eine Adresse ausserhalb des DHCP-Bereichs waehlen, damit es keine Konflikte gibt
-- Den Code in `main.py` auf dem Pico W speichern, damit er automatisch beim Booten laeuft
-- Gateway-Adresse findest du auf deinem Router oder per `ipconfig` (Windows) / `ip route` (Linux)

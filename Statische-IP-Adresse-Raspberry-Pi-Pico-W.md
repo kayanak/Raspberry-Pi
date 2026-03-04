@@ -37,20 +37,19 @@ while not wlan.isconnected():
     print("Warte auf Verbindung...")
     time.sleep(10)
 
- # Ergebnis pruefen
- if wlan.isconnected():
-     ip, subnet, gw, dns = wlan.ifconfig()
-     print("\n=== Verbindung erfolgreich ===")
-     print("IP-Adresse:  ", ip)
-     print("Subnetzmaske:", subnet)
-     print("Gateway:     ", gw)
-     print("DNS:         ", dns)
-     return wlan
- else:
-     print("Verbindung fehlgeschlagen!")
-     return None
+# Ergebnis pruefen
+if wlan.isconnected():
+    ip, subnet, gw, dns = wlan.ifconfig()
+    print("\n=== Verbindung erfolgreich ===")
+    print("IP-Adresse:  ", ip)
+    print("Subnetzmaske:", subnet)
+    print("Gateway:     ", gw)
+    print("DNS:         ", dns)
+    return wlan
+else:
+    print("Verbindung fehlgeschlagen!")
+    return None
 
-print('Verbunden mit IP:', wlan.ifconfig()[0])
 ```
 
 ---

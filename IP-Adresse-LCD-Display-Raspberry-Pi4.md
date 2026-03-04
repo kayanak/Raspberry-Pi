@@ -74,7 +74,7 @@ lcd.cursor_pos = (1, 0)
 lcd.write_string(get_ip())
 ```
 
-Ausfuehren:
+Ausführen:
 
 ```bash
 python3 /home/pi/show_ip.py

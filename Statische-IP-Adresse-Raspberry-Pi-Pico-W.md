@@ -12,13 +12,15 @@ Datei `main.py` auf dem Pico W erstellen:
 import network
 import time
 
- WLAN_SSID     = "DEIN_WLAN_NAME"
- WLAN_PASSWORT = "DEIN_PASSWORT"
+WLAN_SSID     = "WLAN_NAME"
+WLAN_PASSWORT = "WLAN_PASSWORT"
 
- STATISCHE_IP = "192.168.1.100"      # Gewuenschte IP fuer den Pico W
- SUBNETZMASKE = "255.255.255.0"      # Meist 255.255.255.0
- GATEWAY      = "192.168.1.1"        # IP des Routers
- DNS_SERVER   = "8.8.8.8"            # DNS (8.8.8.8 = Google DNS)
+STATISCHE_IP  = "192.168.1.100"      # Gewuenschte IP fuer den Pico W
+SUBNETZMASKE  = "255.255.255.0"      # Meist 255.255.255.0
+GATEWAY       = "192.168.1.1"        # IP des Routers
+DNS_SERVER    = "8.8.8.8"            # DNS (8.8.8.8 = Google DNS)
+
+STATISCHE_IP_VERWENDEN = True
 
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
